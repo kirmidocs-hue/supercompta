@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#0b6c4b",
+                    "on-surface-variant": "#3f4943",
+                    "on-surface": "#191c1d",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-high": "#e7e8e9",
+                    "background": "#f8f9fa",
+                    "on-primary-container": "#8fe2ba",
+                    "on-primary-fixed-variant": "#005137",
+                    "on-background": "#191c1d",
+                    "on-tertiary-fixed-variant": "#5d4201",
+                    "on-tertiary-fixed": "#261900",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#ffdea5",
+                    "primary": "#004d34",
+                    "surface-container-low": "#f3f4f5",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#afc8f0",
+                    "primary-fixed-dim": "#84d7af",
+                    "surface": "#f8f9fa",
+                    "outline-variant": "#bec9c1",
+                    "tertiary": "#573e00",
+                    "primary-fixed": "#a0f4ca",
+                    "secondary": "#476083",
+                    "on-secondary-container": "#445d80",
+                    "inverse-primary": "#84d7af",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed-dim": "#e9c176",
+                    "secondary-fixed": "#d4e3ff",
+                    "surface-container": "#edeeef",
+                    "inverse-surface": "#2e3132",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary-fixed": "#002114",
+                    "on-secondary-fixed": "#001c3a",
+                    "outline": "#6f7a72",
+                    "surface-variant": "#e1e3e4",
+                    "on-error": "#ffffff",
+                    "primary-container": "#006747",
+                    "surface-dim": "#d9dadb",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary-container": "#f4cc80",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#725515",
+                    "secondary-container": "#bdd6ff",
+                    "on-secondary-fixed-variant": "#2f486a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .zellige-pattern {
+            background-color: transparent;
+            background-image: radial-gradient(circle at 2px 2px, rgba(0, 77, 52, 0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .moorish-gradient {
+            background: linear-gradient(135deg, #004d34 0%, #006747 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#e7e8e9] dark:bg-slate-900 flex flex-col p-6 space-y-8 z-40">
+<div class="flex flex-col">
+<span class="font-['Manrope'] font-black text-[#006747] uppercase tracking-widest text-lg">SUPER COMPTA</span>
+<span class="text-[10px] text-on-surface-variant/60 font-medium tracking-widest uppercase">The Moorish Vault</span>
+</div>
+<button class="w-full moorish-gradient text-white py-3 px-4 rounded-sm flex items-center justify-center gap-2 hover:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="font-label text-sm font-medium">Nouvelle Saisie</span>
+</button>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-[#006747] dark:text-emerald-400 bg-white dark:bg-slate-800 rounded-sm shadow-sm transition-transform duration-200" href="index.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Inter'] font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="relevés.html">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-['Inter'] font-medium text-sm">Relevés Bancaires</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="factures.html">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-['Inter'] font-medium text-sm">Factures</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="salaires.html">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-['Inter'] font-medium text-sm">Table Salaires</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-outline-variant/15 space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+<span class="font-['Inter'] font-medium text-sm">Paramètres</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+<span class="font-['Inter'] font-medium text-sm">Déconnexion</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col min-h-screen z-0 relative zellige-pattern">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-50 bg-[#f8f9fa] dark:bg-slate-950 flex justify-between items-center px-8 py-4">
+<div class="flex items-center gap-4">
+<h1 class="font-['Manrope'] text-2xl font-bold tracking-tighter text-[#006747]">Vue d'ensemble</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="bg-surface-container-low border-none rounded-sm pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-tertiary transition-all w-64" placeholder="Rechercher..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-600 hover:bg-[#e7e8e9] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-[#e7e8e9] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 p-12 space-y-12">
+<!-- Hero Empty State Section -->
+<section class="relative overflow-hidden rounded-lg bg-surface-container-lowest p-12 shadow-sm">
+<!-- Decorative Zellige watermark -->
+<div class="absolute -bottom-12 -right-12 opacity-5 pointer-events-none">
+<svg fill="none" height="300" viewbox="0 0 100 100" width="300" xmlns="http://www.w3.org/2000/svg">
+<path class="text-primary" d="M50 0L61.2257 38.7743L100 50L61.2257 61.2257L50 100L38.7743 61.2257L0 50L38.7743 38.7743L50 0Z" fill="currentColor"></path>
+</svg>
+</div>
+<div class="max-w-2xl relative z-10">
+<h2 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight mb-4">Bienvenue dans votre coffre-fort numérique.</h2>
+<p class="text-on-surface-variant text-lg leading-relaxed mb-8">
+                        Votre espace comptable est prêt. Commencez par explorer nos modules spécialisés pour automatiser votre gestion financière en toute sécurité.
+                    </p>
+<div class="flex gap-4">
+<button class="moorish-gradient text-white px-8 py-4 font-label font-bold text-sm rounded-sm hover:scale-[1.02] active:scale-95 transition-all">
+                            Démarrer la configuration
+                        </button>
+<button class="px-8 py-4 font-label font-bold text-sm text-primary rounded-sm border border-primary/10 hover:bg-surface-container-low transition-all">
+                            Voir le guide d'utilisation
+                        </button>
+</div>
+</div>
+</section>
+<!-- Module Grid (Asymmetric Bento Style) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Relevés Bancaires -->
+<div class="col-span-12 lg:col-span-8 group">
+<div class="bg-surface-container-lowest p-8 h-full rounded-lg transition-all duration-300 group-hover:shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-tertiary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex flex-col h-full">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-primary-container/10 rounded-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="account_balance">account_balance</span>
+</div>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Premium Access</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Relevés Bancaires</h3>
+<p class="text-on-surface-variant mb-8 flex-1">
+                                Importez automatiquement vos transactions bancaires. Notre moteur d'IA catégorise vos dépenses pour une réconciliation en temps réel.
+                            </p>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="space-y-1">
+<span class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/60">Limite d'importation</span>
+<p class="text-sm font-bold text-tertiary">500 lignes / mois</p>
+</div>
+<a class="flex items-center gap-2 text-primary font-bold text-sm hover:translate-x-1 transition-transform" href="relevés.html">
+                                    Accéder au module <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Factures -->
+<div class="col-span-12 lg:col-span-4 group">
+<div class="bg-surface-container-lowest p-8 h-full rounded-lg transition-all duration-300 group-hover:shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex flex-col h-full">
+<div class="mb-6 p-3 bg-primary-container/10 rounded-sm w-fit">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="description">description</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Factures</h3>
+<p class="text-on-surface-variant mb-8">
+                                Gestion centralisée de vos achats et ventes avec OCR intelligent.
+                            </p>
+<div class="mt-auto space-y-4">
+<div class="space-y-1">
+<span class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/60">Stockage Cloud</span>
+<p class="text-sm font-bold text-on-surface">5 Go inclus</p>
+</div>
+<a class="flex items-center gap-2 text-primary font-bold text-sm hover:translate-x-1 transition-transform" href="factures.html">
+                                    Accéder au module <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Table Salaires -->
+<div class="col-span-12 group">
+<div class="bg-surface-container-lowest p-8 rounded-lg flex flex-col md:flex-row gap-12 items-center transition-all duration-300 group-hover:shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] relative overflow-hidden">
+<div class="absolute bottom-0 right-0 w-32 h-32 opacity-[0.03] rotate-12 pointer-events-none">
+<svg class="text-primary" fill="currentColor" viewbox="0 0 100 100">
+<path d="M50 0 L100 50 L50 100 L0 50 Z"></path>
+</svg>
+</div>
+<div class="p-6 bg-primary-container/10 rounded-sm">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="payments">payments</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<h3 class="text-2xl font-headline font-bold text-on-surface">Table Salaires</h3>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-bold">ACTIF</span>
+</div>
+<p class="text-on-surface-variant max-w-xl">
+                                Suivez la masse salariale, générez les écritures de paie et gérez les cotisations sociales en un clic. Précision absolue pour votre sérénité fiscale.
+                            </p>
+</div>
+<div class="flex flex-col items-end gap-4 min-w-[200px]">
+<div class="text-right">
+<span class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant/60">Effectif Max</span>
+<p class="text-lg font-bold text-on-surface">Illimité</p>
+</div>
+<a class="moorish-gradient text-white px-6 py-3 rounded-sm font-bold text-sm hover:scale-105 transition-all" href="salaires.html">
+                                Accéder au module
+                            </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-[#e7e8e9] flex justify-between items-center px-12 py-8 border-t border-[#bec9c1]/15">
+<div class="flex gap-8">
+<a class="text-slate-500 font-['Inter'] text-[10px] uppercase tracking-[0.1em] hover:text-[#006747] transition-opacity duration-200" href="#">Mentions Légales</a>
+<a class="text-slate-500 font-['Inter'] text-[10px] uppercase tracking-[0.1em] hover:text-[#006747] transition-opacity duration-200" href="#">Confidentialité</a>
+</div>
+<div class="text-slate-500 font-['Inter'] text-[10px] uppercase tracking-[0.1em]">
+                Conçu par Faisal Karmi
+            </div>
+</footer>
+</main>
+</body></html>
