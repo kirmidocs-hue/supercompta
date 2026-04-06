@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestion des Factures - SUPER COMPTA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#0b6c4b",
+                        "on-surface-variant": "#3f4943",
+                        "on-surface": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "background": "#f8f9fa",
+                        "on-primary-container": "#8fe2ba",
+                        "on-primary-fixed-variant": "#005137",
+                        "on-background": "#191c1d",
+                        "on-tertiary-fixed-variant": "#5d4201",
+                        "on-tertiary-fixed": "#261900",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdea5",
+                        "primary": "#004d34",
+                        "surface-container-low": "#f3f4f5",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#afc8f0",
+                        "primary-fixed-dim": "#84d7af",
+                        "surface": "#f8f9fa",
+                        "outline-variant": "#bec9c1",
+                        "tertiary": "#573e00",
+                        "primary-fixed": "#a0f4ca",
+                        "secondary": "#476083",
+                        "on-secondary-container": "#445d80",
+                        "inverse-primary": "#84d7af",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9c176",
+                        "secondary-fixed": "#d4e3ff",
+                        "surface-container": "#edeeef",
+                        "inverse-surface": "#2e3132",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed": "#002114",
+                        "on-secondary-fixed": "#001c3a",
+                        "outline": "#6f7a72",
+                        "surface-variant": "#e1e3e4",
+                        "on-error": "#ffffff",
+                        "primary-container": "#006747",
+                        "surface-dim": "#d9dadb",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-container": "#f4cc80",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#725515",
+                        "secondary-container": "#bdd6ff",
+                        "on-secondary-fixed-variant": "#2f486a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .zellige-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 20-20 20L0 20z' fill='%23004d34' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#e7e8e9] flex flex-col p-6 space-y-8 z-40">
+<div class="flex flex-col">
+<span class="font-headline font-black text-primary uppercase tracking-widest text-xl">SUPER COMPTA</span>
+<span class="text-[10px] text-tertiary font-bold tracking-widest opacity-70">THE MOORISH VAULT</span>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center space-x-3 p-3 text-slate-500 hover:text-primary hover:translate-x-1 transition-transform duration-200" href="index.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 p-3 text-slate-500 hover:text-primary hover:translate-x-1 transition-transform duration-200" href="relevés.html">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-medium text-sm">Relevés Bancaires</span>
+</a>
+<a class="flex items-center space-x-3 p-3 text-primary bg-white rounded-sm shadow-sm scale-95-on-click" href="factures.html">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium text-sm">Factures</span>
+</a>
+<a class="flex items-center space-x-3 p-3 text-slate-500 hover:text-primary hover:translate-x-1 transition-transform duration-200" href="salaires.html">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-medium text-sm">Table Salaires</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-outline-variant/15 space-y-2">
+<a class="flex items-center space-x-3 p-3 text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium text-sm">Paramètres</span>
+</a>
+<a class="flex items-center space-x-3 p-3 text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium text-sm">Déconnexion</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64 flex flex-col min-h-screen zellige-overlay">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-50 bg-[#f8f9fa] flex justify-between items-center px-8 py-4 border-b border-outline-variant/10">
+<div class="flex items-center space-x-4">
+<h1 class="font-headline text-2xl font-bold tracking-tighter text-primary">Gestion des Factures</h1>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative">
+<span class="material-symbols-outlined text-slate-600 hover:bg-[#e7e8e9] p-2 rounded-full cursor-pointer transition-colors">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-slate-600 hover:bg-[#e7e8e9] p-2 rounded-full cursor-pointer transition-colors">account_circle</span>
+</div>
+</header>
+<section class="p-8 space-y-8 max-w-7xl mx-auto w-full">
+<!-- Pattern Border Accent -->
+<div class="w-full h-1 bg-gradient-to-r from-primary via-tertiary to-primary opacity-30"></div>
+<!-- Bento Layout Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Upload Zone (Bento Item 1) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-8 rounded-lg shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] border-t-4 border-primary">
+<div class="flex flex-col space-y-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-xl font-bold text-on-surface">Importation Digitale</h3>
+<p class="text-sm text-on-surface-variant">Glissez-déposez vos pièces comptables</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+</div>
+<div class="group relative border-2 border-dashed border-outline-variant rounded-md p-12 transition-all hover:border-primary hover:bg-surface-container-low flex flex-col items-center justify-center space-y-4 cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">upload_file</span>
+</div>
+<div class="text-center">
+<p class="font-bold text-on-surface">Sélectionner des fichiers</p>
+<p class="text-xs text-on-surface-variant mt-1 uppercase tracking-widest font-semibold">MAX 20 FICHIERS • PDF, JPG, PNG</p>
+</div>
+<input class="absolute inset-0 opacity-0 cursor-pointer" multiple="" type="file"/>
+</div>
+<div class="flex items-center justify-between text-xs font-bold text-on-surface-variant uppercase tracking-widest pt-2">
+<span>0 fichiers sélectionnés</span>
+<button class="text-primary hover:underline">Vider la file</button>
+</div>
+</div>
+</div>
+<!-- Empty State / Placeholder Illustration (Bento Item 2) -->
+<div class="lg:col-span-7 bg-primary flex flex-col justify-center items-center rounded-lg p-12 relative overflow-hidden text-on-primary">
+<div class="absolute inset-0 z-0 opacity-10">
+<div class="grid grid-cols-6 gap-4 p-4">
+<!-- Geometric Decorative Pattern -->
+<div class="w-full aspect-square border border-white/50 rotate-45"></div>
+<div class="w-full aspect-square border border-white/50 rotate-45"></div>
+<div class="w-full aspect-square border border-white/50 rotate-45"></div>
+<div class="w-full aspect-square border border-white/50 rotate-45"></div>
+</div>
+</div>
+<div class="relative z-10 text-center space-y-4">
+<div class="w-24 h-24 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-5xl text-tertiary-fixed">receipt_long</span>
+</div>
+<h2 class="font-headline text-3xl font-extrabold tracking-tight">Le Coffre est Vide</h2>
+<p class="max-w-md mx-auto text-on-primary/70 text-lg">Commencez par importer vos factures pour générer automatiquement les écritures comptables selon la méthode du Vault.</p>
+<button class="mt-6 px-8 py-3 bg-tertiary text-white font-bold rounded-sm hover:bg-tertiary-container transition-all flex items-center space-x-2 mx-auto">
+<span class="material-symbols-outlined">add_circle</span>
+<span>NOUVELLE SAISIE</span>
+</button>
+</div>
+</div>
+<!-- Data Table Section (Full Width) -->
+<div class="lg:col-span-12 space-y-6">
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<h3 class="font-headline text-xl font-bold text-primary">Journal d'Achats (ACH)</h3>
+<p class="text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold">Prévisualisation des écritures</p>
+</div>
+<button class="flex items-center space-x-2 px-6 py-2 rounded-sm bg-surface-container-high text-on-surface-variant font-bold text-sm cursor-not-allowed opacity-50 border border-outline-variant/30 transition-all" disabled="">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>EXPORTER CSV</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest rounded-lg shadow-sm overflow-hidden border border-outline-variant/10">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">
+<tr>
+<th class="px-6 py-4">Code journal</th>
+<th class="px-6 py-4">Date</th>
+<th class="px-6 py-4">Référence</th>
+<th class="px-6 py-4">Compte</th>
+<th class="px-6 py-4">Libellé</th>
+<th class="px-6 py-4 text-right">Débit</th>
+<th class="px-6 py-4 text-right">Crédit</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Empty state rows -->
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-20 text-center text-on-surface-variant italic font-medium opacity-50" colspan="7">
+<div class="flex flex-col items-center space-y-2">
+<span class="material-symbols-outlined text-4xl opacity-20">table_rows</span>
+<span>Aucune donnée à afficher pour le moment</span>
+</div>
+</td>
+</tr>
+</tbody>
+<tfoot class="bg-surface-container-low/50">
+<tr class="text-xs font-black text-on-surface">
+<td class="px-6 py-4 text-right uppercase tracking-widest text-[10px]" colspan="5">Totaux Journal</td>
+<td class="px-6 py-4 text-right text-primary">0,00 MAD</td>
+<td class="px-6 py-4 text-right text-primary">0,00 MAD</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full mt-auto bg-[#e7e8e9] border-t border-outline-variant/15">
+<div class="flex justify-between items-center px-12 py-8 w-full">
+<div class="flex flex-col space-y-1">
+<p class="font-body text-[10px] uppercase tracking-[0.1em] text-slate-500">© 2024 SUPER COMPTA MANAGEMENT</p>
+<p class="font-body text-[10px] uppercase tracking-[0.1em] text-on-surface font-bold">Conçu par Faisal Karmi</p>
+</div>
+<div class="flex space-x-8">
+<a class="font-body text-[10px] uppercase tracking-[0.1em] text-slate-500 hover:text-primary transition-opacity duration-200" href="#">Mentions Légales</a>
+<a class="font-body text-[10px] uppercase tracking-[0.1em] text-slate-500 hover:text-primary transition-opacity duration-200" href="#">Confidentialité</a>
+</div>
+</div>
+</footer>
+</main>
+<!-- Floating Action Button (FAB) - Suppressed per rule on focused pages, but placeholder for structure awareness -->
+<!-- FAB is suppressed because we are on a "Details/Management" screen -->
+</body></html>
