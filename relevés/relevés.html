@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Extraction de Relevés - SUPER COMPTA</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#0b6c4b",
+                        "on-surface-variant": "#3f4943",
+                        "on-surface": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "background": "#f8f9fa",
+                        "on-primary-container": "#8fe2ba",
+                        "on-primary-fixed-variant": "#005137",
+                        "on-background": "#191c1d",
+                        "on-tertiary-fixed-variant": "#5d4201",
+                        "on-tertiary-fixed": "#261900",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdea5",
+                        "primary": "#004d34",
+                        "surface-container-low": "#f3f4f5",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#afc8f0",
+                        "primary-fixed-dim": "#84d7af",
+                        "surface": "#f8f9fa",
+                        "outline-variant": "#bec9c1",
+                        "tertiary": "#573e00",
+                        "primary-fixed": "#a0f4ca",
+                        "secondary": "#476083",
+                        "on-secondary-container": "#445d80",
+                        "inverse-primary": "#84d7af",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9c176",
+                        "secondary-fixed": "#d4e3ff",
+                        "surface-container": "#edeeef",
+                        "inverse-surface": "#2e3132",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed": "#002114",
+                        "on-secondary-fixed": "#001c3a",
+                        "outline": "#6f7a72",
+                        "surface-variant": "#e1e3e4",
+                        "on-error": "#ffffff",
+                        "primary-container": "#006747",
+                        "surface-dim": "#d9dadb",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-container": "#f4cc80",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#725515",
+                        "secondary-container": "#bdd6ff",
+                        "on-secondary-fixed-variant": "#2f486a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .zellige-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 15-15 15-15-15zM0 30l15 15-15 15-15-15zM60 30l15 15-15 15-15-15zM30 60l15 15-15 15-15-15z' fill='%23004d34' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="w-full sticky top-0 z-50 bg-[#f8f9fa] dark:bg-slate-950 font-['Manrope'] tracking-tight">
+<div class="flex justify-between items-center px-8 py-4 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-[#006747] dark:text-emerald-500">SUPER COMPTA</span>
+<div class="hidden md:flex gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:bg-[#e7e8e9] transition-colors px-3 py-1" href="index.html">Dashboard</a>
+<a class="text-[#006747] font-bold border-b-2 border-[#573e00] px-3 py-1" href="relevés.html">Relevés Bancaires</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-[#e7e8e9] transition-colors px-3 py-1" href="factures.html">Factures</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-[#e7e8e9] transition-colors px-3 py-1" href="salaires.html">Table Salaires</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-[#e7e8e9] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-[#e7e8e9] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-full w-64 bg-[#e7e8e9] dark:bg-slate-900 p-6 space-y-8 flex-shrink-0">
+<div class="space-y-1">
+<h2 class="font-['Manrope'] font-black text-[#006747] uppercase tracking-widest text-lg">SUPER COMPTA</h2>
+<p class="text-xs text-slate-500 font-medium">The Moorish Vault</p>
+</div>
+<div class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="index.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#006747] dark:text-emerald-400 bg-white dark:bg-slate-800 rounded-sm shadow-sm" href="relevés.html">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="font-medium text-sm">Relevés Bancaires</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="factures.html">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-medium text-sm">Factures</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-500 hover:text-[#006747] hover:translate-x-1 transition-transform duration-200" href="salaires.html">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-medium text-sm">Table Salaires</span>
+</a>
+</div>
+<button class="w-full bg-primary text-white py-3 px-4 rounded-sm font-bold flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span>Nouvelle Saisie</span>
+</button>
+<div class="pt-6 border-t border-outline-variant/15 space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-[#006747] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-sm">Paramètres</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-[#006747] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-sm">Déconnexion</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto zellige-pattern px-8 py-10 relative">
+<!-- Page Header Area -->
+<div class="max-w-7xl mx-auto mb-10 flex justify-between items-end">
+<div class="space-y-1">
+<h1 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight">Extraction de Relevés</h1>
+<p class="text-on-surface-variant font-body">Module de traitement intelligent des flux bancaires.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-highest text-outline font-bold py-3 px-6 rounded-sm flex items-center gap-2 transition-all cursor-not-allowed opacity-50" disabled="" id="btn-generate-csv">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                        Générer CSV
+                    </button>
+</div>
+</div>
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Bento Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Upload Zone Card -->
+<div class="lg:col-span-2 glass-card rounded-md border-t-4 border-primary p-12 flex flex-col items-center justify-center text-center space-y-4 shadow-sm group cursor-pointer hover:shadow-md transition-shadow">
+<div class="w-24 h-24 rounded-full bg-surface-container-low flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Déposez vos relevés ici</h3>
+<p class="text-on-surface-variant max-w-sm mx-auto">Glissez jusqu'à 12 fichiers PDF ou images. Notre moteur OCR extraira les données automatiquement.</p>
+</div>
+<input class="hidden" id="file-input" multiple="" type="file"/>
+<button class="mt-4 border border-primary text-primary px-8 py-3 rounded-sm font-bold hover:bg-primary hover:text-white transition-colors" onclick="document.getElementById('file-input').click()">
+                            Sélectionner les fichiers
+                        </button>
+</div>
+<!-- Guidelines / Stats Card -->
+<div class="bg-surface-container-low rounded-md p-8 flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -bottom-10 -right-10 opacity-10 rotate-12">
+<span class="material-symbols-outlined text-9xl text-primary" data-icon="account_balance">account_balance</span>
+</div>
+<div class="space-y-6 relative z-10">
+<h4 class="font-headline font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                                Règles de Mapping Automatique
+                            </h4>
+<ul class="space-y-4 text-sm text-on-surface-variant font-medium">
+<li class="flex justify-between border-b border-outline-variant/20 pb-2">
+<span>Code par défaut</span>
+<span class="text-tertiary">5141</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant/20 pb-2">
+<span>Compte par défaut</span>
+<span class="text-tertiary">44970000</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant/20 pb-2">
+<span>Frais Bancaires</span>
+<span class="text-primary-container font-bold">6147</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant/20 pb-2">
+<span>Cotisations CNSS</span>
+<span class="text-primary-container font-bold">4441</span>
+</li>
+</ul>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/30 relative z-10">
+<p class="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-2">État du Traitement</p>
+<div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="w-0 h-full bg-primary transition-all duration-500"></div>
+</div>
+<p class="text-[10px] mt-2 text-on-surface-variant">Prêt pour l'extraction</p>
+</div>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-surface-container-lowest rounded-md shadow-sm border border-outline-variant/15 overflow-hidden">
+<div class="px-8 py-6 border-b border-outline-variant/15 flex justify-between items-center">
+<h2 class="font-headline font-bold text-lg">Données Extraites</h2>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold uppercase rounded-full" id="status-badge">En attente de fichiers</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-8 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Code</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Date</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Compte</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Libellé</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Débit</th>
+<th class="px-6 py-4 text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Crédit</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10" id="table-body">
+<tr id="empty-state-row">
+<td class="px-8 py-20 text-center text-on-surface-variant italic font-body" colspan="6">
+<span class="material-symbols-outlined text-4xl mb-2 block opacity-20" data-icon="search_off">search_off</span>
+                                        Aucune donnée à afficher. Veuillez télécharger un relevé pour commencer l'extraction.
+                                    </td>
+</tr>
+<!-- Dynamic rows will be inserted here -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="w-full bg-[#e7e8e9] dark:bg-slate-900 border-t border-[#bec9c1]/15 mt-auto">
+<div class="flex justify-between items-center px-12 py-8 w-full font-['Inter'] text-[10px] uppercase tracking-[0.1em]">
+<div class="text-slate-500">
+                Conçu par <span class="font-bold text-on-surface">Faisal Karmi</span>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-[#006747] transition-opacity duration-200" href="#">Mentions Légales</a>
+<a class="text-slate-500 hover:text-[#006747] transition-opacity duration-200" href="#">Confidentialité</a>
+</div>
+<div class="text-slate-400">
+                © 2024 SUPER COMPTA
+            </div>
+</div>
+</footer>
+<!-- Simple logic script for interaction -->
+<script>
+        const fileInput = document.getElementById('file-input');
+        const tableBody = document.getElementById('table-body');
+        const emptyStateRow = document.getElementById('empty-state-row');
+        const generateBtn = document.getElementById('btn-generate-csv');
+        const statusBadge = document.getElementById('status-badge');
+
+        const mockData = [
+            { code: '5141', date: '01/10/2023', compte: '44970000', libelle: 'VIREMENT RECU CLIENT X', debit: '', credit: '15,000.00' },
+            { code: '5141', date: '05/10/2023', compte: '6147', libelle: 'FRAIS TENUE DE COMPTE Q3', debit: '120.00', credit: '' },
+            { code: '5141', date: '12/10/2023', compte: '4441', libelle: 'REGLEMENT CNSS SEPTEMBRE', debit: '4,560.50', credit: '' },
+            { code: '5141', date: '15/10/2023', compte: '44970000', libelle: 'ACHAT FOURNITURES BUREAU', debit: '850.00', credit: '' },
+            { code: '5141', date: '28/10/2023', compte: '6147', libelle: 'COMMISSION MOUVEMENT', debit: '45.00', credit: '' }
+        ];
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                simulateExtraction();
+            }
+        });
+
+        function simulateExtraction() {
+            // UI Feedback
+            statusBadge.textContent = 'Extraction en cours...';
+            statusBadge.classList.remove('bg-surface-container-high');
+            statusBadge.classList.add('bg-tertiary-fixed', 'text-on-tertiary-fixed');
+            
+            setTimeout(() => {
+                emptyStateRow.remove();
+                
+                mockData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-surface-container-low transition-colors duration-200';
+                    tr.innerHTML = `
+                        <td class="px-8 py-4 font-mono text-sm text-primary font-bold">${row.code}</td>
+                        <td class="px-6 py-4 text-sm">${row.date}</td>
+                        <td class="px-6 py-4 text-sm font-medium ${row.compte === '44970000' ? 'text-on-surface-variant' : 'text-primary-container'}">${row.compte}</td>
+                        <td class="px-6 py-4 text-sm text-on-surface font-medium">${row.libelle}</td>
+                        <td class="px-6 py-4 text-sm text-right font-bold text-error">${row.debit || '-'}</td>
+                        <td class="px-6 py-4 text-sm text-right font-bold text-surface-tint">${row.credit || '-'}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                // Enable CSV button
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('bg-surface-container-highest', 'text-outline', 'cursor-not-allowed', 'opacity-50');
+                generateBtn.classList.add('bg-primary', 'text-white', 'hover:bg-primary-container');
+
+                statusBadge.textContent = 'Extraction terminée';
+                statusBadge.classList.remove('bg-tertiary-fixed', 'text-on-tertiary-fixed');
+                statusBadge.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+            }, 1500);
+        }
+    </script>
+</body></html>
