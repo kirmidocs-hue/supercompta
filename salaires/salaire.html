@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestion des Salaires - SUPER COMPTA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#0b6c4b",
+                        "on-surface-variant": "#3f4943",
+                        "on-surface": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "background": "#f8f9fa",
+                        "on-primary-container": "#8fe2ba",
+                        "on-primary-fixed-variant": "#005137",
+                        "on-background": "#191c1d",
+                        "on-tertiary-fixed-variant": "#5d4201",
+                        "on-tertiary-fixed": "#261900",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#ffdea5",
+                        "primary": "#004d34",
+                        "surface-container-low": "#f3f4f5",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#afc8f0",
+                        "primary-fixed-dim": "#84d7af",
+                        "surface": "#f8f9fa",
+                        "outline-variant": "#bec9c1",
+                        "tertiary": "#573e00",
+                        "primary-fixed": "#a0f4ca",
+                        "secondary": "#476083",
+                        "on-secondary-container": "#445d80",
+                        "inverse-primary": "#84d7af",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9c176",
+                        "secondary-fixed": "#d4e3ff",
+                        "surface-container": "#edeeef",
+                        "inverse-surface": "#2e3132",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed": "#002114",
+                        "on-secondary-fixed": "#001c3a",
+                        "outline": "#6f7a72",
+                        "surface-variant": "#e1e3e4",
+                        "on-error": "#ffffff",
+                        "primary-container": "#006747",
+                        "surface-dim": "#d9dadb",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-container": "#f4cc80",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#725515",
+                        "secondary-container": "#bdd6ff",
+                        "on-secondary-fixed-variant": "#2f486a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .zellige-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 60l15-15-15-15-15 15 15 15zM0 30l15-15 15 15-15 15L0 30zm60 0l-15-15-15 15 15 15 15-15z' fill='%23004d34' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#e7e8e9] dark:bg-slate-900 flex flex-col p-6 space-y-8 z-50">
+<div class="flex flex-col space-y-1">
+<h1 class="font-headline font-black text-primary uppercase tracking-widest text-xl">SUPER COMPTA</h1>
+<span class="text-[10px] text-outline font-headline uppercase tracking-[0.2em]">The Moorish Vault</span>
+</div>
+<nav class="flex-1 flex flex-col space-y-2">
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:text-primary hover:translate-x-1 transition-transform duration-200" href="index.html">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Inter'] font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:text-primary hover:translate-x-1 transition-transform duration-200" href="relevés.html">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-['Inter'] font-medium text-sm">Relevés Bancaires</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:text-primary hover:translate-x-1 transition-transform duration-200" href="factures.html">
+<span class="material-symbols-outlined">description</span>
+<span class="font-['Inter'] font-medium text-sm">Factures</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 text-primary bg-white rounded-sm shadow-sm" href="salaires.html">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-['Inter'] font-medium text-sm">Table Salaires</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-outline-variant/15 flex flex-col space-y-2">
+<button class="w-full bg-primary text-white py-3 px-4 rounded-sm flex items-center justify-center space-x-2 hover:bg-primary-container transition-colors duration-300 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-xs font-bold uppercase tracking-wider">Nouvelle Saisie</span>
+</button>
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-500 hover:text-primary text-sm transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Paramètres</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-2 text-slate-500 hover:text-primary text-sm transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Déconnexion</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col min-h-screen zellige-pattern">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-40 bg-[#f8f9fa] flex justify-between items-center px-8 py-4">
+<div class="flex items-center space-x-8">
+<h2 class="text-2xl font-headline font-bold tracking-tighter text-primary">Gestion des Salaires</h2>
+<div class="relative group">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-outline group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">search</span>
+</span>
+<input class="bg-surface-container-low border-none rounded-sm py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-tertiary w-64 transition-all" placeholder="Rechercher une écriture..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-slate-600 hover:bg-[#e7e8e9] transition-colors rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-cover" data-alt="portrait of a professional financial consultant in a modern office with warm natural lighting and soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXjFHI0fqvOIytTxBt98J63Z3csZLnnZUvGuKszqiyDRMJxBEtBKimpjKiHdw8lJLJPbK_tqfuLkW6UScNpng-9jab65vXJpXilWiCxc1LwGVBZHEcrceDpwYR72fn9sdWwoVDmf63ZxfKj7eJRdJr0QpqL7mzyiBjusIGfrY54hD1Yc3QQ5T7mSAFaiXSjw3rzIaWR_BbPmatg549HesHlxlZ7NbdRp-j-Du7hr4BCK0p8IopAQGICXj9U67-Tc3MqmTeLWPuJvw"/>
+</div>
+</div>
+</header>
+<!-- View Content -->
+<div class="p-8 flex flex-col space-y-8 flex-1">
+<!-- Hero Stats / Header Action -->
+<div class="grid grid-cols-12 gap-8 items-end">
+<div class="col-span-8">
+<div class="flex items-baseline space-x-4">
+<span class="text-sm font-label text-on-surface-variant uppercase tracking-widest">Période Actuelle</span>
+<h3 class="text-4xl font-headline font-extrabold text-primary">Saisie des OD de Paie</h3>
+</div>
+<p class="mt-2 text-on-surface-variant max-w-2xl font-body leading-relaxed">
+                        Importez vos fichiers d'extraction sociale pour générer automatiquement les écritures comptables (OD) de salaires avec calcul des charges patronales et salariales.
+                    </p>
+</div>
+<div class="col-span-4 flex justify-end">
+<button class="flex items-center space-x-2 px-6 py-3 bg-surface-container-highest text-outline-variant rounded-sm cursor-not-allowed transition-all font-label text-sm uppercase font-bold tracking-widest" disabled="">
+<span class="material-symbols-outlined">download</span>
+<span>Exporter CSV</span>
+</button>
+</div>
+</div>
+<!-- Upload Area -->
+<section class="bg-surface-container-lowest p-8 rounded-sm shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] border-t-4 border-primary/20 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-9xl">upload_file</span>
+</div>
+<div class="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-lg p-12 bg-surface-container-low/50 hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+</div>
+<h4 class="text-lg font-headline font-bold text-on-surface">Déposez votre fichier Excel ou PDF</h4>
+<p class="text-sm text-on-surface-variant mt-2 text-center max-w-xs">
+                        Glissez et déposez l'extraction de votre logiciel de paie pour initier le calcul des 8 lignes d'OD.
+                    </p>
+<div class="mt-6 flex space-x-4">
+<span class="px-3 py-1 bg-white text-xs font-bold text-tertiary rounded shadow-sm border border-outline-variant/10">EXCEL (.xlsx)</span>
+<span class="px-3 py-1 bg-white text-xs font-bold text-tertiary rounded shadow-sm border border-outline-variant/10">PDF (.pdf)</span>
+</div>
+</div>
+</section>
+<!-- Data Table Section -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest rounded-sm shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] overflow-hidden">
+<div class="px-8 py-6 bg-surface-container-high/50 flex justify-between items-center border-b border-outline-variant/10">
+<h5 class="font-headline font-bold text-primary flex items-center space-x-2">
+<span class="material-symbols-outlined text-sm">list_alt</span>
+<span>Détail de l'Écriture (Journal d'OD)</span>
+</h5>
+<div class="flex space-x-2">
+<div class="px-4 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-black rounded-full uppercase tracking-tighter">Équilibre Requis</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-[11px] uppercase tracking-[0.15em] font-bold">
+<th class="px-8 py-4">Type</th>
+<th class="px-8 py-4">Date</th>
+<th class="px-8 py-4">Compte</th>
+<th class="px-8 py-4">Libellé</th>
+<th class="px-8 py-4 text-right">Débit</th>
+<th class="px-8 py-4 text-right">Crédit</th>
+</tr>
+</thead>
+<tbody>
+<!-- Empty State Rows -->
+<tr class="border-b border-outline-variant/5">
+<td class="px-8 py-32" colspan="6">
+<div class="flex flex-col items-center justify-center opacity-40">
+<img class="w-48 grayscale mix-blend-multiply mb-6" data-alt="minimalist accounting illustration with a calculator and clean white space representing an empty ledger" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtp5f0g1eIQqKAa4QpRASKqkQ7H__zNVOb-iPe7H-sOhJYNGGuaELTdmN_VTnnXTJfeJwO5MYtnuJByp1jMzkeEVYH1CYGqaUSntIiCQUIuSCzD72R7qdrIrJR3_lr2nlVJdVhYs1J8ToL8zHhFKHtSAaReZjheNq3yvkPlkhVRTYDVFrm8ofo1AYdlVyohBksZ1P4uVJqHBkze7wZV7VRzEkFqlGkSCuO7JM3KKrKvCvuSdtrp_RncAcMEWM3ObLqygHJnRxh40k"/>
+<p class="text-on-surface-variant font-label text-sm italic">Aucune donnée importée pour le moment.</p>
+</div>
+</td>
+</tr>
+</tbody>
+<tfoot class="bg-surface-container-low/30 border-t-2 border-primary/10">
+<tr class="text-sm font-headline font-bold text-primary">
+<td class="px-8 py-6 text-right uppercase tracking-widest text-xs" colspan="4">Total Journal</td>
+<td class="px-8 py-6 text-right">0,00 €</td>
+<td class="px-8 py-6 text-right">0,00 €</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="w-full mt-auto flex justify-between items-center px-12 py-8 bg-[#e7e8e9] border-t border-outline-variant/15">
+<div class="flex space-x-6 text-[10px] uppercase tracking-[0.1em] text-slate-500 font-label">
+<a class="hover:text-primary transition-colors" href="#">Mentions Légales</a>
+<a class="hover:text-primary transition-colors" href="#">Confidentialité</a>
+</div>
+<div class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant font-label">
+                Conçu par <span class="text-primary font-bold">Faisal Karmi</span>
+</div>
+<div class="text-[10px] uppercase tracking-[0.1em] text-slate-400 font-label">
+                © 2024 SUPER COMPTA
+            </div>
+</footer>
+</main>
+<!-- FAB (Suppressed based on rules for task-focused page, but logic remains if needed elsewhere) -->
+<!-- Zellige Motif Overlays (Subtle branding) -->
+<div class="fixed bottom-0 right-0 w-64 h-64 pointer-events-none z-0 opacity-[0.03]">
+<svg class="w-full h-full text-primary fill-current" viewbox="0 0 100 100">
+<path d="M50 0 L100 50 L50 100 L0 50 Z"></path>
+<path d="M50 10 L90 50 L50 90 L10 50 Z" fill-opacity="0.5"></path>
+</svg>
+</div>
+</body></html>
