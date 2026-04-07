@@ -7,7 +7,6 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -90,6 +89,13 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-row {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface font-body min-h-screen flex">
@@ -118,7 +124,7 @@
 </a>
 </nav>
 <div class="pt-6 border-t border-outline-variant/15 flex flex-col space-y-2">
-<button class="w-full bg-primary text-white py-3 px-4 rounded-sm flex items-center justify-center space-x-2 hover:bg-primary-container transition-colors duration-300 shadow-sm active:scale-95">
+<button class="w-full bg-primary text-white py-3 px-4 rounded-sm flex items-center justify-center space-x-2 hover:bg-primary-container transition-colors duration-300 shadow-sm active:scale-95" onclick="handleFileUpload()">
 <span class="material-symbols-outlined text-sm">add</span>
 <span class="text-xs font-bold uppercase tracking-wider">Nouvelle Saisie</span>
 </button>
@@ -151,7 +157,7 @@
 <span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
 </button>
 <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant/20">
-<img class="w-full h-full object-cover" data-alt="portrait of a professional financial consultant in a modern office with warm natural lighting and soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXjFHI0fqvOIytTxBt98J63Z3csZLnnZUvGuKszqiyDRMJxBEtBKimpjKiHdw8lJLJPbK_tqfuLkW6UScNpng-9jab65vXJpXilWiCxc1LwGVBZHEcrceDpwYR72fn9sdWwoVDmf63ZxfKj7eJRdJr0QpqL7mzyiBjusIGfrY54hD1Yc3QQ5T7mSAFaiXSjw3rzIaWR_BbPmatg549HesHlxlZ7NbdRp-j-Du7hr4BCK0p8IopAQGICXj9U67-Tc3MqmTeLWPuJvw"/>
+<img alt="Portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXjFHI0fqvOIytTxBt98J63Z3csZLnnZUvGuKszqiyDRMJxBEtBKimpjKiHdw8lJLJPbK_tqfuLkW6UScNpng-9jab65vXJpXilWiCxc1LwGVBZHEcrceDpwYR72fn9sdWwoVDmf63ZxfKj7eJRdJr0QpqL7mzyiBjusIGfrY54hD1Yc3QQ5T7mSAFaiXSjw3rzIaWR_BbPmatg549HesHlxlZ7NbdRp-j-Du7hr4BCK0p8IopAQGICXj9U67-Tc3MqmTeLWPuJvw"/>
 </div>
 </div>
 </header>
@@ -165,29 +171,29 @@
 <h3 class="text-4xl font-headline font-extrabold text-primary">Saisie des OD de Paie</h3>
 </div>
 <p class="mt-2 text-on-surface-variant max-w-2xl font-body leading-relaxed">
-                        Importez vos fichiers d'extraction sociale pour générer automatiquement les écritures comptables (OD) de salaires avec calcul des charges patronales et salariales.
-                    </p>
+                    Importez vos fichiers d'extraction sociale pour générer automatiquement les écritures comptables (OD) de salaires avec calcul des charges patronales et salariales.
+                </p>
 </div>
 <div class="col-span-4 flex justify-end">
-<button class="flex items-center space-x-2 px-6 py-3 bg-surface-container-highest text-outline-variant rounded-sm cursor-not-allowed transition-all font-label text-sm uppercase font-bold tracking-widest" disabled="">
+<button class="flex items-center space-x-2 px-6 py-3 bg-surface-container-highest text-outline-variant rounded-sm cursor-not-allowed transition-all font-label text-sm uppercase font-bold tracking-widest" disabled="" id="export-btn">
 <span class="material-symbols-outlined">download</span>
 <span>Exporter CSV</span>
 </button>
 </div>
 </div>
 <!-- Upload Area -->
-<section class="bg-surface-container-lowest p-8 rounded-sm shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] border-t-4 border-primary/20 relative overflow-hidden group">
+<section class="bg-surface-container-lowest p-8 rounded-sm shadow-[0_12px_32px_-4px_rgba(25,28,29,0.06)] border-t-4 border-primary/20 relative overflow-hidden group cursor-pointer transition-all hover:border-primary/40" id="upload-section" onclick="handleFileUpload()">
 <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
 <span class="material-symbols-outlined text-9xl">upload_file</span>
 </div>
-<div class="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-lg p-12 bg-surface-container-low/50 hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-lg p-12 bg-surface-container-low/50 hover:bg-surface-container-low transition-all">
 <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
 </div>
 <h4 class="text-lg font-headline font-bold text-on-surface">Déposez votre fichier Excel ou PDF</h4>
 <p class="text-sm text-on-surface-variant mt-2 text-center max-w-xs">
-                        Glissez et déposez l'extraction de votre logiciel de paie pour initier le calcul des 8 lignes d'OD.
-                    </p>
+                    Glissez et déposez l'extraction de votre logiciel de paie pour initier le calcul des 8 lignes d'OD.
+                </p>
 <div class="mt-6 flex space-x-4">
 <span class="px-3 py-1 bg-white text-xs font-bold text-tertiary rounded shadow-sm border border-outline-variant/10">EXCEL (.xlsx)</span>
 <span class="px-3 py-1 bg-white text-xs font-bold text-tertiary rounded shadow-sm border border-outline-variant/10">PDF (.pdf)</span>
@@ -201,12 +207,12 @@
 <span class="material-symbols-outlined text-sm">list_alt</span>
 <span>Détail de l'Écriture (Journal d'OD)</span>
 </h5>
-<div class="flex space-x-2">
-<div class="px-4 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-black rounded-full uppercase tracking-tighter">Équilibre Requis</div>
+<div class="flex space-x-2" id="status-badge">
+<div class="px-4 py-1 bg-surface-container-highest text-outline-variant text-[10px] font-black rounded-full uppercase tracking-tighter">En attente d'import</div>
 </div>
 </div>
 <div class="overflow-x-auto">
-<table class="w-full text-left border-collapse">
+<table class="w-full text-left border-collapse" id="salary-table">
 <thead>
 <tr class="bg-surface-container-low text-on-surface-variant text-[11px] uppercase tracking-[0.15em] font-bold">
 <th class="px-8 py-4">Type</th>
@@ -217,12 +223,12 @@
 <th class="px-8 py-4 text-right">Crédit</th>
 </tr>
 </thead>
-<tbody>
+<tbody id="table-body">
 <!-- Empty State Rows -->
-<tr class="border-b border-outline-variant/5">
+<tr id="empty-state">
 <td class="px-8 py-32" colspan="6">
 <div class="flex flex-col items-center justify-center opacity-40">
-<img class="w-48 grayscale mix-blend-multiply mb-6" data-alt="minimalist accounting illustration with a calculator and clean white space representing an empty ledger" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtp5f0g1eIQqKAa4QpRASKqkQ7H__zNVOb-iPe7H-sOhJYNGGuaELTdmN_VTnnXTJfeJwO5MYtnuJByp1jMzkeEVYH1CYGqaUSntIiCQUIuSCzD72R7qdrIrJR3_lr2nlVJdVhYs1J8ToL8zHhFKHtSAaReZjheNq3yvkPlkhVRTYDVFrm8ofo1AYdlVyohBksZ1P4uVJqHBkze7wZV7VRzEkFqlGkSCuO7JM3KKrKvCvuSdtrp_RncAcMEWM3ObLqygHJnRxh40k"/>
+<img alt="Empty ledger" class="w-48 grayscale mix-blend-multiply mb-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtp5f0g1eIQqKAa4QpRASKqkQ7H__zNVOb-iPe7H-sOhJYNGGuaELTdmN_VTnnXTJfeJwO5MYtnuJByp1jMzkeEVYH1CYGqaUSntIiCQUIuSCzD72R7qdrIrJR3_lr2nlVJdVhYs1J8ToL8zHhFKHtSAaReZjheNq3yvkPlkhVRTYDVFrm8ofo1AYdlVyohBksZ1P4uVJqHBkze7wZV7VRzEkFqlGkSCuO7JM3KKrKvCvuSdtrp_RncAcMEWM3ObLqygHJnRxh40k"/>
 <p class="text-on-surface-variant font-label text-sm italic">Aucune donnée importée pour le moment.</p>
 </div>
 </td>
@@ -231,8 +237,8 @@
 <tfoot class="bg-surface-container-low/30 border-t-2 border-primary/10">
 <tr class="text-sm font-headline font-bold text-primary">
 <td class="px-8 py-6 text-right uppercase tracking-widest text-xs" colspan="4">Total Journal</td>
-<td class="px-8 py-6 text-right">0,00 €</td>
-<td class="px-8 py-6 text-right">0,00 €</td>
+<td class="px-8 py-6 text-right" id="total-debit">0,00 €</td>
+<td class="px-8 py-6 text-right" id="total-credit">0,00 €</td>
 </tr>
 </tfoot>
 </table>
@@ -246,19 +252,94 @@
 <a class="hover:text-primary transition-colors" href="#">Confidentialité</a>
 </div>
 <div class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant font-label">
-                Conçu par <span class="text-primary font-bold">Faisal Karmi</span>
+            Conçu par <span class="text-primary font-bold">Faisal Karmi</span>
 </div>
 <div class="text-[10px] uppercase tracking-[0.1em] text-slate-400 font-label">
-                © 2024 SUPER COMPTA
-            </div>
+            © 2024 SUPER COMPTA
+        </div>
 </footer>
 </main>
-<!-- FAB (Suppressed based on rules for task-focused page, but logic remains if needed elsewhere) -->
-<!-- Zellige Motif Overlays (Subtle branding) -->
+<!-- Zellige Motif Overlays -->
 <div class="fixed bottom-0 right-0 w-64 h-64 pointer-events-none z-0 opacity-[0.03]">
 <svg class="w-full h-full text-primary fill-current" viewbox="0 0 100 100">
 <path d="M50 0 L100 50 L50 100 L0 50 Z"></path>
 <path d="M50 10 L90 50 L50 90 L10 50 Z" fill-opacity="0.5"></path>
 </svg>
 </div>
+<script>
+    function handleFileUpload() {
+        // Simulation of processing an upload
+        const statusBadge = document.getElementById('status-badge');
+        statusBadge.innerHTML = `<div class="px-4 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-black rounded-full uppercase tracking-tighter animate-pulse">Traitement en cours...</div>`;
+
+        setTimeout(() => {
+            generateSalaryEntries();
+            document.getElementById('upload-section').classList.add('hidden');
+            document.getElementById('export-btn').removeAttribute('disabled');
+            document.getElementById('export-btn').classList.remove('cursor-not-allowed', 'bg-surface-container-highest', 'text-outline-variant');
+            document.getElementById('export-btn').classList.add('bg-primary', 'text-white', 'hover:bg-primary-container');
+            statusBadge.innerHTML = `<div class="px-4 py-1 bg-primary text-white text-[10px] font-black rounded-full uppercase tracking-tighter flex items-center space-x-1"><span class="material-symbols-outlined text-[12px]">check_circle</span><span>Équilibré</span></div>`;
+        }, 1200);
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
+    }
+
+    function generateSalaryEntries() {
+        const tableBody = document.getElementById('table-body');
+        const emptyState = document.getElementById('empty-state');
+        if (emptyState) emptyState.remove();
+
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('fr-FR');
+        
+        // Base Calculation Values
+        const SalaireBrut = 2850.00;
+        const Prime = 150.00;
+        const TotalBrut = SalaireBrut + Prime;
+        const ChargesPatronalesTaux = 0.1698;
+        const ChargesSalarialesTaux = 0.0411;
+        
+        const CP = TotalBrut * ChargesPatronalesTaux;
+        const CS = TotalBrut * ChargesSalarialesTaux;
+        const NetAPayer = TotalBrut - CS;
+
+        const entries = [
+            { type: 'OD', date: dateStr, compte: '641000', libelle: 'Salaire de base', debit: SalaireBrut, credit: 0 },
+            { type: 'OD', date: dateStr, compte: '641300', libelle: 'Primes et gratifications', debit: Prime, credit: 0 },
+            { type: 'OD', date: dateStr, compte: '645000', libelle: 'Charges patronales (16.98%)', debit: CP, credit: 0 },
+            { type: 'OD', date: dateStr, compte: '421000', libelle: 'Net à payer', debit: 0, credit: NetAPayer },
+            { type: 'OD', date: dateStr, compte: '431000', libelle: 'Sécurité sociale', debit: 0, credit: CP + CS },
+            { type: 'OD', date: dateStr, compte: '437000', libelle: 'Autres organismes sociaux', debit: 0, credit: 0 },
+            { type: 'OD', date: dateStr, compte: '442100', libelle: 'Prélèvement à la source', debit: 0, credit: 0 },
+            { type: 'OD', date: dateStr, compte: '647500', libelle: 'Médecine du travail', debit: 0, credit: 0 }
+        ];
+
+        let totalD = 0;
+        let totalC = 0;
+
+        tableBody.innerHTML = '';
+        entries.forEach((entry, index) => {
+            totalD += entry.debit;
+            totalC += entry.credit;
+
+            const row = document.createElement('tr');
+            row.className = `border-b border-outline-variant/5 hover:bg-surface-container-low transition-colors animate-row`;
+            row.style.animationDelay = `${index * 0.05}s`;
+            row.innerHTML = `
+                <td class="px-8 py-4 text-xs font-bold text-outline-variant">${entry.type}</td>
+                <td class="px-8 py-4 text-sm text-on-surface-variant font-mono">${entry.date}</td>
+                <td class="px-8 py-4 text-sm font-bold text-primary">${entry.compte}</td>
+                <td class="px-8 py-4 text-sm text-on-surface-variant">${entry.libelle}</td>
+                <td class="px-8 py-4 text-sm text-right font-medium">${entry.debit > 0 ? formatCurrency(entry.debit) : '-'}</td>
+                <td class="px-8 py-4 text-sm text-right font-medium text-tertiary">${entry.credit > 0 ? formatCurrency(entry.credit) : '-'}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        document.getElementById('total-debit').textContent = formatCurrency(totalD);
+        document.getElementById('total-credit').textContent = formatCurrency(totalC);
+    }
+</script>
 </body></html>
