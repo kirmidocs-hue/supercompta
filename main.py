@@ -5,15 +5,17 @@ import google.generativeai as genai
 import json
 import re
 
-# --- CONFIGURATION INITIALE ---
+# --- 1. CONFIGURATION INITIALE ---
 st.set_page_config(page_title="SUPER COMPTA AI", layout="wide")
 
-# --- CONFIGURATION IA AVEC VOTRE CLÉ ---
+# --- 2. CONFIGURATION IA (Modèle Stable) ---
 API_KEY = "AIzaSyDGu4L2kbLtRr7GNCT2-POBR_YqV1Vhboc"
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
 
-# --- FONCTIONS DE FORMATAGE ---
+# Utilisation du modèle gemini-pro pour éviter l'erreur 404
+model = genai.GenerativeModel('gemini-pro')
+
+# --- 3. FONCTIONS DE FORMATAGE ---
 def format_montant(val):
     try:
         if val is None or str(val).strip() in ["", "0", "0,00"]: return "0,00"
@@ -38,7 +40,7 @@ def get_compte_banque(libelle, debit_val):
         if any(w in l for w in ["MOURABAHA", "KRITI", "PRÉLÈVEMENTS"]): return "11175000"
     return "44970000"
 
-# --- INTERFACE ---
+# --- 4. INTERFACE ---
 st.title("SUPER COMPTA")
 
 tab1, tab2, tab3 = st.tabs(["Relevés Bancaires", "Factures", "Table Salaire"])
@@ -57,20 +59,23 @@ with tab1:
                     text = page.extract_text()
                     if text: full_text += text + "\n"
             
+            # Prompt optimisé pour Gemini Pro
             prompt = (
-                "Tu es un expert comptable marocain. Extrais TOUTES les transactions du texte suivant. "
-                "RÈGLES CRITIQUES : Ne saute AUCUNE ligne. Résume les libellés à 27 caractères max. "
-                "Pour les chèques, garde seulement les 6 derniers chiffres. "
-                "Retourne UNIQUEMENT un JSON array. "
-                "Format: [{\"date\":\"dd/mm/yyyy\", \"libelle\":\"...\", \"debit\":0.0, \"credit\":0.0}] "
-                f"Texte: {full_text}"
+                "Tu es un expert comptable. Extrais TOUTES les transactions du texte suivant. "
+                "Format de sortie : JSON uniquement. "
+                "Structure : [{\"date\":\"jj/mm/aaaa\", \"libelle\":\"...\", \"debit\":0.0, \"credit\":0.0}] "
+                "Règle : Libellé max 27 caractères. "
+                f"Texte : {full_text}"
             )
             
             try:
                 response = model.generate_content(prompt)
-                match = re.search(r'\[.*\]', response.text, re.DOTALL)
-                if match:
-                    data = json.loads(match.group())
+                # Nettoyage pour ne garder que le JSON
+                raw_text = response.text
+                json_match = re.search(r'\[.*\]', raw_text, re.DOTALL)
+                
+                if json_match:
+                    data = json.loads(json_match.group())
                     for item in data:
                         all_banque_data.append({
                             "Code": "5141",
@@ -80,15 +85,17 @@ with tab1:
                             "débit": format_montant(item.get('debit', 0)),
                             "crédit": format_montant(item.get('credit', 0))
                         })
+                else:
+                    st.error(f"L'IA n'a pas pu structurer les données de {f.name}")
             except Exception as e:
-                st.error(f"Erreur d'analyse sur {f.name}: {e}")
+                st.error(f"Erreur sur {f.name} : {str(e)}")
 
         if all_banque_data:
             df_b = pd.DataFrame(all_banque_data)
             st.dataframe(df_b)
             st.download_button("Télécharger CSV Banque", df_b.to_csv(index=False, sep=";").encode('utf-8'), "banque.csv")
 
-# --- ONGLET 3 : TABLE SALAIRE ---
+# --- ONGLET 3 : TABLE SALAIRE (Inchangé et stable) ---
 with tab3:
     st.header("Table Salaire")
     s_file = st.file_uploader("Upload Excel Salaire", type=['xlsx'])
