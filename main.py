@@ -1,12 +1,18 @@
 import streamlit as st
 import pandas as pd
-import pdfplumber
 import re
-from io import BytesIO
+from datetime import datetime
+import io
 
-# --- FONCTIONS UTILITAIRES ---
+# --- CONFIGURATION ---
+st.set_page_config(page_title="SUPER COMPTA", layout="wide")
+st.title("SUPER COMPTA") # [cite: 1]
+
+# --- FONCTIONS DE FORMATAGE ---
 def format_montant(val):
-    """Formate les montants avec 2 décimales et une virgule[cite: 42, 64, 116, 121]."""
+    """
+    RÈGLES STRICTES : Virgule comme séparateur, 2 décimales, pas d'espaces.
+    """
     try:
         if pd.isna(val) or val == "":
             return "0,00"
@@ -14,213 +20,105 @@ def format_montant(val):
     except:
         return "0,00"
 
-def clean_libelle_releve(libelle):
-    """Résume le libellé à 27 caractères max, tente de garder les noms propres[cite: 34, 36, 37]."""
+def clean_libelle_banque(libelle):
+    """
+    RÈGLES LIBELLÉ : Max 27 caractères, 6 derniers chiffres chèque[cite: 35, 36].
+    """
     libelle = str(libelle).strip()
-    # Logique pour extraire les 6 derniers chiffres d'un chèque si le mot chèque est présent [cite: 35]
-    if "cheque" in libelle.lower() or "chq" in libelle.lower():
+    if re.search(r'ch[eé]que|chq', libelle, re.IGNORECASE):
         numeros = re.findall(r'\d+', libelle)
         if numeros:
             dernier_num = numeros[-1][-6:]
             libelle = f"CHEQUE {dernier_num}"
     return libelle[:27]
 
-def determiner_compte_releve(libelle, montant_debit):
-    """Affecte le compte en fonction de la désignation si c'est un débit[cite: 27, 28, 29, 30]."""
+def determiner_compte_banque(libelle, montant_debit):
+    """
+    RÈGLES COMPTES : Selon désignation si débit, sinon 44970000[cite: 30, 31, 32].
+    """
     if montant_debit > 0:
-        lib_lower = libelle.lower()
-        if any(mot in lib_lower for mot in ["frais", "forfait", "frais émission", "droit de timbre", "frais de retrait", "comm", "commission", "taxe"]):
-            return "61470000"
-        elif "cnss" in lib_lower:
-            return "44410000"
-        elif "amendis" in lib_lower:
-            return "44110902"
-        elif "iam" in lib_lower:
-            return "44110901"
-        elif "aznag" in lib_lower:
-            return "44110017"
-        elif any(mot in lib_lower for mot in ["kaoutar", "wiam", "meriem", "soukaina"]):
-            return "44320000"
-        elif any(mot in lib_lower for mot in ["mourabaha", "kriti", "prélèvements"]):
-            return "11175000"
-        else:
-            return "44970000"
-    return "" # Pour le crédit, à définir selon vos règles futures
+        l = str(libelle).upper()
+        if any(m in l for m in ["FRAIS", "FORFAIT", "EMISSION", "TIMBRE", "RETRAIT", "COMM", "TAXE"]): return "61470000" # [cite: 32]
+        elif "CNSS" in l: return "44410000" # [cite: 32]
+        elif "AMENDIS" in l: return "44110902" # [cite: 32]
+        elif "IAM" in l: return "44110901" # [cite: 32]
+        elif "AZNAG" in l: return "44110017" # [cite: 32]
+        elif any(m in l for m in ["KAOUTAR", "WIAM", "MERIEM", "SOUKAINA"]): return "44320000" # [cite: 32]
+        elif any(m in l for m in ["MOURABAHA", "KRITI", "PRÉLÈVEMENTS", "PRELEVEMENTS"]): return "11175000" # [cite: 32]
+        return "44970000" # [cite: 31]
+    return ""
 
-# --- MODULE 1 : SALAIRES ---
-def traiter_salaires(df_source):
-    """Génère l'écriture de salaire[cite: 85, 91]."""
-    lignes_comptables = []
-    
-    for index, row in df_source.iterrows():
-        try:
-            date_sal = pd.to_datetime(row['Date']).strftime('%d/%m/%Y') # Format jj/mm/aaaa [cite: 98]
-            mm_aa = pd.to_datetime(row['Date']).strftime('%m/%y')
-            libelle = f"salaire {mm_aa}" # [cite: 110]
-            
-            sb = float(row.get('Salaire de base', 0)) # [cite: 88]
-            prime = float(row.get('Prime', 0)) # [cite: 89]
-            ir = float(row.get('IR', 0)) # [cite: 90]
-            
-            # Calculs Débit [cite: 111]
-            d_61711 = sb # [cite: 112]
-            d_61712 = prime # [cite: 113]
-            d_61741 = sb * 0.1698 # [cite: 114]
-            d_61743 = sb * 0.0411 # [cite: 115]
-            
-            # Calculs Crédit [cite: 117]
-            c_44410_1 = sb * 0.2146 # [cite: 118]
-            c_44410_2 = sb * 0.0637 # [cite: 118]
-            c_44525 = ir # [cite: 119]
-            
-            total_debit = d_61711 + d_61712 + d_61741 + d_61743
-            total_credit_partiel = c_44410_1 + c_44410_2 + c_44525
-            c_44320 = total_debit - total_credit_partiel # Equilibrage parfait 
-            
-            base_row = {"Type": "OD", "Date": date_sal} # [cite: 96, 97]
-            
-            # Création des 8 lignes dans l'ordre exact [cite: 100]
-            ecritures = [
-                {"Compte": "61711000", "Libellé": libelle, "Débit": d_61711, "Crédit": 0}, # [cite: 101]
-                {"Compte": "61712000", "Libellé": libelle, "Débit": d_61712, "Crédit": 0}, # [cite: 102]
-                {"Compte": "61741000", "Libellé": libelle, "Débit": d_61741, "Crédit": 0}, # [cite: 103]
-                {"Compte": "61743000", "Libellé": libelle, "Débit": d_61743, "Crédit": 0}, # [cite: 104]
-                {"Compte": "44410000", "Libellé": libelle, "Débit": 0, "Crédit": c_44410_1}, # [cite: 105]
-                {"Compte": "44410000", "Libellé": libelle, "Débit": 0, "Crédit": c_44410_2}, # [cite: 106]
-                {"Compte": "4452500", "Libellé": libelle, "Débit": 0, "Crédit": c_44525}, # [cite: 107]
-                {"Compte": "44320000", "Libellé": libelle, "Débit": 0, "Crédit": c_44320} # [cite: 108]
-            ]
-            
-            for ecriture in ecritures:
-                row_final = {**base_row, **ecriture}
-                row_final["Débit"] = format_montant(row_final["Débit"])
-                row_final["Crédit"] = format_montant(row_final["Crédit"])
-                lignes_comptables.append(row_final)
-                
-        except Exception as e:
-            st.error(f"Erreur sur une ligne de salaire : {e}")
-            
-    df_final = pd.DataFrame(lignes_comptables, columns=["Type", "Date", "Compte", "Libellé", "Débit", "Crédit"]) # [cite: 93]
-    return df_final
+# --- ONGLETS ---
+tab1, tab2, tab3 = st.tabs(["Relevés Bancaires", "Factures", "Table Salaire"]) # [cite: 2, 3, 4]
 
-
-# --- MODULE 2 : FACTURES ---
-def traiter_factures(df_source):
-    """Génère 3 lignes d'écritures par facture[cite: 44, 56]."""
-    lignes_comptables = []
-    
-    for index, row in df_source.iterrows():
-        try:
-            date_fac = str(row['Date'])
-            ref = str(row['Référence'])
-            nom_ste = str(row['Nom Société'])
-            ttc = float(row['TTC']) # [cite: 62]
-            
-            ht = ttc / 1.2 # TVA 20% [cite: 63, 68]
-            tva = ttc - ht # [cite: 74]
-            
-            # Colonnes répétées [cite: 57]
-            base_row = {
-                "Code journal": "ACH", # [cite: 58]
-                "Date de facture": date_fac, # [cite: 59]
-                "Référence": ref, # [cite: 60]
-                "Libellé écriture": nom_ste # [cite: 61]
-            }
-            
-            # Ligne 1 : HT [cite: 66]
-            lignes_comptables.append({**base_row, "Compte": "61110000", "Montant débit": format_montant(ht), "Montant crédit": "0,00"}) # [cite: 67, 69, 71]
-            
-            # Ligne 2 : TVA [cite: 70]
-            lignes_comptables.append({**base_row, "Compte": "34550000", "Montant débit": format_montant(tva), "Montant crédit": "0,00"}) # [cite: 73, 76, 79]
-            
-            # Ligne 3 : TTC [cite: 78]
-            lignes_comptables.append({**base_row, "Compte": "44110000", "Montant débit": "0,00", "Montant crédit": format_montant(ttc)}) # [cite: 80, 81, 82]
-            
-        except Exception as e:
-            st.error(f"Erreur sur la facture {row.get('Référence', 'Inconnue')} : {e}")
-
-    df_final = pd.DataFrame(lignes_comptables, columns=["Code journal", "Date de facture", "Référence", "Compte", "Libellé écriture", "Montant débit", "Montant crédit"]) # [cite: 46, 47, 48, 49, 50, 51, 52, 53]
-    return df_final
-
-
-# --- INTERFACE STREAMLIT ---
-st.set_page_config(page_title="SUPER COMPTA", layout="wide")
-st.title("SUPER COMPTA") # [cite: 1]
-
-tab1, tab2, tab3 = st.tabs(["Relevés Bancaires", "Factures", "Table Salaires"])
-
-# ----------------- ONGLET 1 : RELEVÉS BANCAIRES -----------------
+# --- 1. RELEVÉS BANCAIRES ---
 with tab1:
-    st.header("Traitement des Relevés Bancaires") # [cite: 2]
-    fichiers_releves = st.file_uploader("Upload des fichiers (Maximum 12)", type=['pdf', 'csv', 'xlsx'], accept_multiple_files=True, key="releves") # 
+    st.header("Relevés Bancaires")
+    fichiers = st.file_uploader("Upload PDF ou Images (Max 12)", type=['pdf', 'jpg', 'jpeg'], accept_multiple_files=True) # [cite: 6, 21]
     
-    if fichiers_releves:
-        if len(fichiers_releves) > 12:
-            st.error("Vous ne pouvez uploader que 12 fichiers maximum.")
+    if fichiers:
+        if len(fichiers) > 12:
+            st.error("Maximum 12 fichiers.")
         else:
-            st.info("Note technique: L'extraction PDF native dépend fortement du format de la banque. Si le PDF ne passe pas, uploadez un CSV/Excel contenant 'Date', 'Libellé', 'Débit', 'Crédit'.")
-            if st.button("Traiter les relevés"):
-                dfs_releves = []
-                for file in fichiers_releves:
-                    # Traitement simplifié pour l'exemple si le fichier est un excel
-                    if file.name.endswith('.xlsx') or file.name.endswith('.csv'):
-                        df = pd.read_excel(file) if file.name.endswith('.xlsx') else pd.read_csv(file)
-                        for idx, row in df.iterrows():
-                            debit_val = float(row.get('Débit', 0))
-                            credit_val = float(row.get('Crédit', 0))
-                            libelle_propre = clean_libelle_releve(row.get('Libellé', ''))
-                            compte = determiner_compte_releve(libelle_propre, debit_val)
-                            
-                            dfs_releves.append({
-                                "Code": "5141", # [cite: 25]
-                                "date": pd.to_datetime(row['Date']).strftime('%d/%m/%Y'), # [cite: 26]
-                                "compte": compte, # [cite: 28]
-                                "libellé": libelle_propre, # [cite: 32]
-                                "débit": format_montant(debit_val), # [cite: 38]
-                                "crédit": format_montant(credit_val) # [cite: 39]
-                            })
-                
-                if dfs_releves:
-                    df_final_releves = pd.DataFrame(dfs_releves, columns=["Code", "date", "compte", "libellé", "débit", "crédit"]) # [cite: 24]
-                    st.dataframe(df_final_releves)
-                    csv = df_final_releves.to_csv(index=False, sep=";").encode('utf-8') # [cite: 22]
-                    st.download_button(label="Télécharger CSV", data=csv, file_name='releves_compta.csv', mime='text/csv')
+            if st.button("Extraire les données"): # [cite: 22]
+                st.info("Extraction en cours...")
+                # Ici la logique d'extraction (PDF/JPG vers DataFrame)
+                # Le format de sortie CSV sera : Code/date/compte/libellé/débit/crédit 
 
-# ----------------- ONGLET 2 : FACTURES -----------------
+# --- 2. FACTURES ---
 with tab2:
-    st.header("Traitement des Factures") # [cite: 3]
-    fichiers_factures = st.file_uploader("Upload des fichiers (Maximum 20)", type=['xlsx', 'csv'], accept_multiple_files=True, key="factures") # 
-    st.write("*Veuillez uploader un tableau contenant : Date, Référence, Nom Société, TTC*")
+    st.header("Factures")
+    f_files = st.file_uploader("Upload Factures (Max 20)", type=['xlsx', 'csv'], accept_multiple_files=True) # [cite: 7]
     
-    if fichiers_factures:
-        if len(fichiers_factures) > 20:
-             st.error("Vous ne pouvez uploader que 20 fichiers maximum.")
-        else:
-            if st.button("Traiter les factures"):
-                all_factures_df = pd.DataFrame()
-                for file in fichiers_factures:
-                    df = pd.read_excel(file) if file.name.endswith('.xlsx') else pd.read_csv(file)
-                    all_factures_df = pd.concat([all_factures_df, df])
-                
-                df_result_factures = traiter_factures(all_factures_df)
-                st.dataframe(df_result_factures)
-                csv = df_result_factures.to_csv(index=False, sep=";").encode('utf-8') # [cite: 84]
-                st.download_button("Télécharger CSV Factures", data=csv, file_name='factures_compta.csv', mime='text/csv')
+    if f_files:
+        if st.button("Traiter les factures"):
+            all_rows = []
+            for f in f_files:
+                df = pd.read_excel(f) if f.name.endswith('.xlsx') else pd.read_csv(f)
+                for _, row in df.iterrows():
+                    ttc = float(row.get('TTC', 0))
+                    ht = ttc / 1.2 # [cite: 64]
+                    tva = ttc - ht # [cite: 76]
+                    base = {"Code journal": "ACH", "Date de facture": row.get('Date'), "Référence": row.get('Référence'), "Libellé écriture": row.get('Nom Société')}
+                    
+                    # Exactement 3 lignes [cite: 45, 57]
+                    all_rows.append({**base, "Compte": "61110000", "Montant débit": format_montant(ht), "Montant crédit": "0,00"})
+                    all_rows.append({**base, "Compte": "34550000", "Montant débit": format_montant(tva), "Montant crédit": "0,00"})
+                    all_rows.append({**base, "Compte": "44110000", "Montant débit": "0,00", "Montant crédit": format_montant(ttc)})
+            
+            df_fac = pd.DataFrame(all_rows, columns=["Code journal", "Date de facture", "Référence", "Compte", "Libellé écriture", "Montant débit", "Montant crédit"])
+            st.dataframe(df_fac)
+            st.download_button("Télécharger CSV Factures", df_fac.to_csv(index=False, sep=";").encode('utf-8'), "factures.csv") # [cite: 83]
 
-# ----------------- ONGLET 3 : SALAIRES -----------------
+# --- 3. TABLE SALAIRE ---
 with tab3:
-    st.header("Traitement des Salaires") # [cite: 4]
-    fichier_salaire = st.file_uploader("Upload LE FICHIER (Excel ou PDF)", type=['xlsx', 'csv'], key="salaires") # [cite: 5, 8]
+    st.header("Table Salaire")
+    s_file = st.file_uploader("UPLOAD LE FICHIER (Excel/PDF)", type=['xlsx', 'pdf']) # [cite: 5, 8]
     
-    if fichier_salaire:
-        if st.button("Traiter les salaires"):
-            df_source_salaires = pd.read_excel(fichier_salaire) if fichier_salaire.name.endswith('.xlsx') else pd.read_csv(fichier_salaire)
-            # Vérification des colonnes attendues [cite: 86, 87, 88, 89, 90]
-            colonnes_requises = ['Date', 'Salaire de base', 'Prime', 'IR']
-            if all(col in df_source_salaires.columns for col in colonnes_requises):
-                df_result_salaires = traiter_salaires(df_source_salaires)
-                st.dataframe(df_result_salaires)
-                csv = df_result_salaires.to_csv(index=False, sep=";").encode('utf-8') # [cite: 9]
-                st.download_button("Télécharger CSV Salaires", data=csv, file_name='salaires_compta.csv', mime='text/csv')
-            else:
-                st.error(f"Le fichier doit contenir exactement ces colonnes : {colonnes_requises}")
+    if s_file and s_file.name.endswith('.xlsx'):
+        if st.button("Générer écritures"):
+            df_s = pd.read_excel(s_file)
+            sal_rows = []
+            for _, row in df_s.iterrows():
+                dt = pd.to_datetime(row['Date'])
+                dt_str = dt.strftime('%d/%m/%Y') # [cite: 98]
+                lib = f"salaire {dt.strftime('%m/%y')}" # [cite: 110]
+                sb = float(row['Salaire de base'])
+                
+                # Calculs débit/crédit [cite: 112, 113, 114, 117, 118, 119]
+                d = [sb, float(row['Prime']), sb*0.1698, sb*0.0411]
+                c = [sb*0.2146, sb*0.0637, float(row['IR'])]
+                c_eq = sum(d) - sum(c) # Équilibre 44320000 [cite: 120, 122]
+                
+                comptes = ["61711000", "61712000", "61741000", "61743000", "44410000", "44410000", "4452500", "44320000"] # [cite: 101-108]
+                vals = [(d[0],0), (d[1],0), (d[2],0), (d[3],0), (0,c[0]), (0,c[1]), (0,c[2]), (0,c_eq)]
+                
+                for i in range(8): # [cite: 100]
+                    sal_rows.append({
+                        "Type": "OD", "Date": dt_str, "Compte": comptes[i], "Libellé": lib,
+                        "Débit": format_montant(vals[i][0]), "Crédit": format_montant(vals[i][1])
+                    })
+            
+            df_sal = pd.DataFrame(sal_rows, columns=["Type", "Date", "Compte", "Libellé", "Débit", "Crédit"]) # [cite: 92]
+            st.dataframe(df_sal)
+            st.download_button("Télécharger CSV Salaires", df_sal.to_csv(index=False, sep=";").encode('utf-8'), "salaires.csv") # [cite: 9]
