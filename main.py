@@ -5,15 +5,15 @@ import google.generativeai as genai
 import json
 import re
 
-# --- 1. CONFIGURATION INITIALE ---
+# --- CONFIGURATION INITIALE ---
 st.set_page_config(page_title="SUPER COMPTA AI", layout="wide")
 
-# --- 2. CONFIGURATION IA AVEC VOTRE CLÉ ---
+# --- CONFIGURATION IA AVEC VOTRE CLÉ ---
 API_KEY = "AIzaSyDGu4L2kbLtRr7GNCT2-POBR_YqV1Vhboc"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# --- 3. FONCTIONS DE FORMATAGE ---
+# --- FONCTIONS DE FORMATAGE ---
 def format_montant(val):
     try:
         if val is None or str(val).strip() in ["", "0", "0,00"]: return "0,00"
@@ -38,7 +38,7 @@ def get_compte_banque(libelle, debit_val):
         if any(w in l for w in ["MOURABAHA", "KRITI", "PRÉLÈVEMENTS"]): return "11175000"
     return "44970000"
 
-# --- 4. INTERFACE ---
+# --- INTERFACE ---
 st.title("SUPER COMPTA")
 
 tab1, tab2, tab3 = st.tabs(["Relevés Bancaires", "Factures", "Table Salaire"])
@@ -76,4 +76,45 @@ with tab1:
                             "Code": "5141",
                             "date": item.get('date', ''),
                             "compte": get_compte_banque(item.get('libelle', ''), item.get('debit', 0)),
-                            "libellé": str(item.
+                            "libellé": str(item.get('libelle', ''))[:27],
+                            "débit": format_montant(item.get('debit', 0)),
+                            "crédit": format_montant(item.get('credit', 0))
+                        })
+            except Exception as e:
+                st.error(f"Erreur d'analyse sur {f.name}: {e}")
+
+        if all_banque_data:
+            df_b = pd.DataFrame(all_banque_data)
+            st.dataframe(df_b)
+            st.download_button("Télécharger CSV Banque", df_b.to_csv(index=False, sep=";").encode('utf-8'), "banque.csv")
+
+# --- ONGLET 3 : TABLE SALAIRE ---
+with tab3:
+    st.header("Table Salaire")
+    s_file = st.file_uploader("Upload Excel Salaire", type=['xlsx'])
+    if s_file and st.button("Générer Journal Salaire"):
+        df_s = pd.read_excel(s_file)
+        sal_results = []
+        for _, row in df_s.iterrows():
+            sb = float(row['Salaire de base'])
+            prime = float(row.get('Prime', 0))
+            ir = float(row.get('IR', 0))
+            dt = pd.to_datetime(row['Date'])
+            lib = f"salaire {dt.strftime('%m/%y')}"
+            
+            d_vals = [sb, prime, round(sb*0.1698, 2), round(sb*0.0411, 2)]
+            c_vals = [round(sb*0.2146, 2), round(sb*0.0637, 2), ir]
+            net = round(sum(d_vals) - sum(c_vals), 2)
+            
+            comptes = ["61711000", "61712000", "61741000", "61743000", "44410000", "44410000", "4452500", "44320000"]
+            monts = [(d_vals[0],0), (d_vals[1],0), (d_vals[2],0), (d_vals[3],0), (0,c_vals[0]), (0,c_vals[1]), (0,c_vals[2]), (0,net)]
+            
+            for i in range(8):
+                sal_results.append({
+                    "Type": "OD", "Date": dt.strftime('%d/%m/%Y'), "Compte": comptes[i],
+                    "Libellé": lib, "Débit": format_montant(monts[i][0]), "Crédit": format_montant(monts[i][1])
+                })
+        
+        df_sal = pd.DataFrame(sal_results)
+        st.dataframe(df_sal)
+        st.download_button("Télécharger CSV Salaire", df_sal.to_csv(index=False, sep=";").encode('utf-8'), "salaires.csv")
